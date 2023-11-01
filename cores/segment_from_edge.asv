@@ -1,12 +1,16 @@
 function segmented_image = segment_from_edge(orig_img, edged_image, thresh_method)
-    % transformasi edged image ke binary
     % pilihan thresh = "Otsu" atau "Adaptif"
-    im = imbinarize(edged_image, 'adaptive');
     if thresh_method == "Otsu"
         im = imbinarize(edged_image, graythresh(edged_image));
+    elseif thresh_method == "Adaptif"
+        im = imbinarize(edged_image, 'adaptive');
+    else
+        error('Unknown threshold method!');
     end
-    
+    % transformasi edged image ke binary
+    im = imbinarize(edged_image, graythresh(edged_image));
     % membuat segmentation mask
+
     % menutup pixel hasil deteksi tepi
     im = imclose(im, strel("square", 3));
     im = bwmorph(im, 'bridge');
